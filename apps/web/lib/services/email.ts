@@ -1,14 +1,14 @@
 import nodemailer from 'nodemailer'
 import { Inquiry } from '@/../../packages/db/models/Inquiry'
 
-const transporter = nodemailer.createTransporter({
+const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: parseInt(process.env.SMTP_PORT || '587'),
   secure: false,
-  auth: {
+  auth: process.env.SMTP_USER && process.env.SMTP_PASS ? {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
-  },
+  } : undefined,
 })
 
 export async function sendInquiryEmail(inquiry: Inquiry): Promise<boolean> {
@@ -70,8 +70,13 @@ export async function sendInquiryEmail(inquiry: Inquiry): Promise<boolean> {
       </div>
     `
 
+    if (!process.env.FROM_EMAIL) {
+      console.warn('FROM_EMAIL not set; skipping email send in development')
+      return true
+    }
+
     await transporter.sendMail({
-      from: `"${process.env.FROM_NAME}" <${process.env.FROM_EMAIL}>`,
+      from: `"${process.env.FROM_NAME || 'Kayo Charters'}" <${process.env.FROM_EMAIL}>`,
       to: process.env.FROM_EMAIL,
       subject: `New ${serviceTypeLabels[inquiry.service_type]} Inquiry - ${inquiry.name}`,
       html: htmlContent,

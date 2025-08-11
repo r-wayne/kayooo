@@ -1,0 +1,1 @@
+{"version":1,"functions":{"/api/aircraft/[id]":{},"/api/aircraft":{},"/api/auth/login":{},"/api/auth/logout":{},"/api/auth/me":{},"/api/experiences/[id]":{},"/api/experiences":{},"/api/inquiries/[id]/status":{},"/api/inquiries":{},"/api/settings":{},"/experiences":{},"/for-sale/[id]":{},"/for-sale":{},"/":{}}}

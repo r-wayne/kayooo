@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -6,7 +8,7 @@ import { ArrowLeft, Users, Clock, Gauge, Plane, MapPin, Shield, MessageCircle } 
 import { Card, CardContent, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { getAircraftById } from '@/lib/services/aircraft'
-import { formatCurrency, generateWhatsAppUrl } from '../../../../packages/ui/lib/utils'
+import { formatCurrency, generateWhatsAppUrl } from '@ui/lib/utils'
 
 interface AircraftDetailPageProps {
   params: {

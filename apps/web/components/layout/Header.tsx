@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X, Phone, Mail } from 'lucide-react'
-import { cn } from '../../../../packages/ui/lib/utils'
+import { cn } from '@ui/lib/utils'
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)

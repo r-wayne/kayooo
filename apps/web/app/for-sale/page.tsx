@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -5,7 +7,7 @@ import { Plane, Users, Clock, Gauge } from 'lucide-react'
 import { Card, CardContent, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { getAircraft } from '@/lib/services/aircraft'
-import { formatCurrency } from '../../../packages/ui/lib/utils'
+import { formatCurrency } from '@ui/lib/utils'
 
 export default async function ForSalePage() {
   const aircraft = await getAircraft()

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getExperiences, createExperience } from '@/lib/services/experience'
 import { verifyToken } from '@/lib/services/auth'
 
+export const runtime = 'nodejs'
+
 export async function GET() {
   try {
     const experiences = await getExperiences()

@@ -3,6 +3,8 @@ import { createInquiry, getInquiries } from '@/lib/services/inquiry'
 import { sendInquiryEmail } from '@/lib/services/email'
 import { verifyToken } from '@/lib/services/auth'
 
+export const runtime = 'nodejs'
+
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
@@ -75,9 +77,11 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
-    const status = searchParams.get('status')
+    const statusParam = searchParams.get('status')
+    const allowed = ['new', 'contacted', 'closed'] as const
+    const status = allowed.includes(statusParam as any) ? (statusParam as typeof allowed[number]) : undefined
     
-    const inquiries = await getInquiries(status || undefined)
+    const inquiries = await getInquiries(status)
     return NextResponse.json({ inquiries })
   } catch (error) {
     console.error('Get inquiries error:', error)

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { updateInquiryStatus } from '@/lib/services/inquiry'
 import { verifyToken } from '@/lib/services/auth'
 
+export const runtime = 'nodejs'
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }

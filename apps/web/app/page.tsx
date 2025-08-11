@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -5,7 +7,7 @@ import { ArrowRight, Star, Shield, Users, Trophy, Plane, MessageCircle } from 'l
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/Card'
 import { getAircraft } from '@/lib/services/aircraft'
-import { formatCurrency, generateWhatsAppUrl } from '../../../packages/ui/lib/utils'
+import { formatCurrency, generateWhatsAppUrl } from '@ui/lib/utils'
 
 export default async function HomePage() {
   const featuredAircraft = await getAircraft(3)

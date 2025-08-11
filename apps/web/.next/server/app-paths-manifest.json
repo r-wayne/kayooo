@@ -1,0 +1,20 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/about/page": "app/about/page.js",
+  "/api/upload/route": "app/api/upload/route.js",
+  "/contact/page": "app/contact/page.js",
+  "/api/aircraft/route": "app/api/aircraft/route.js",
+  "/api/auth/login/route": "app/api/auth/login/route.js",
+  "/api/auth/me/route": "app/api/auth/me/route.js",
+  "/api/aircraft/[id]/route": "app/api/aircraft/[id]/route.js",
+  "/api/auth/logout/route": "app/api/auth/logout/route.js",
+  "/api/inquiries/route": "app/api/inquiries/route.js",
+  "/api/settings/route": "app/api/settings/route.js",
+  "/api/experiences/route": "app/api/experiences/route.js",
+  "/api/experiences/[id]/route": "app/api/experiences/[id]/route.js",
+  "/api/inquiries/[id]/status/route": "app/api/inquiries/[id]/status/route.js",
+  "/experiences/page": "app/experiences/page.js",
+  "/page": "app/page.js",
+  "/for-sale/[id]/page": "app/for-sale/[id]/page.js",
+  "/for-sale/page": "app/for-sale/page.js"
+}

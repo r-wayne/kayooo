@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyToken } from '@/lib/services/auth'
-import { getDatabase } from '@/../../packages/db/lib/mongodb'
+import { getDatabase } from '@db/lib/mongodb'
 import { ObjectId } from 'mongodb'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
   try {

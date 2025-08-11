@@ -1,15 +1,15 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Phone, Mail, MapPin, MessageCircle, Send, CheckCircle } from 'lucide-react'
 import { Card, CardContent, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
-import { generateWhatsAppUrl } from '../../../packages/ui/lib/utils'
+import { generateWhatsAppUrl } from '@ui/lib/utils'
 
-export default function ContactPage() {
+function ContactInner() {
   const searchParams = useSearchParams()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -24,7 +24,6 @@ export default function ContactPage() {
   })
 
   useEffect(() => {
-    // Pre-fill form based on URL parameters
     const service = searchParams.get('service')
     const aircraftId = searchParams.get('aircraft')
     const experienceId = searchParams.get('experience')
@@ -50,23 +49,13 @@ export default function ContactPage() {
     try {
       const response = await fetch('/api/inquiries', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       })
 
       if (response.ok) {
         setIsSubmitted(true)
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          service_type: 'charter',
-          service_id: '',
-          preferred_date: '',
-          message: ''
-        })
+        setFormData({ name: '', email: '', phone: '', service_type: 'charter', service_id: '', preferred_date: '', message: '' })
       } else {
         throw new Error('Failed to submit inquiry')
       }
@@ -88,16 +77,9 @@ export default function ContactPage() {
           <CardContent className="p-8 text-center">
             <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
             <CardTitle className="mb-4">Thank You!</CardTitle>
-            <p className="text-gray-600 mb-6">
-              Your inquiry has been submitted successfully. Our team will contact you within 24 hours.
-            </p>
+            <p className="text-gray-600 mb-6">Your inquiry has been submitted successfully. Our team will contact you within 24 hours.</p>
             <div className="space-y-3">
-              <Button 
-                onClick={() => setIsSubmitted(false)}
-                className="w-full"
-              >
-                Submit Another Inquiry
-              </Button>
+              <Button onClick={() => setIsSubmitted(false)} className="w-full">Submit Another Inquiry</Button>
               <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" className="w-full">
                   <MessageCircle className="w-4 h-4 mr-2" />
@@ -116,13 +98,8 @@ export default function ContactPage() {
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-br from-luxury-black to-luxury-charcoal text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold luxury-heading mb-6">
-            Contact <span className="gold-text">Us</span>
-          </h1>
-          <p className="text-xl leading-relaxed max-w-2xl mx-auto text-gray-300">
-            Ready to take flight? Get in touch with our aviation experts to discuss your needs, 
-            whether it's purchasing an aircraft, chartering a flight, or booking a helicopter experience.
-          </p>
+          <h1 className="text-5xl md:text-6xl font-bold luxury-heading mb-6">Contact <span className="gold-text">Us</span></h1>
+          <p className="text-xl leading-relaxed max-w-2xl mx-auto text-gray-300">Ready to take flight? Get in touch with our aviation experts to discuss your needs, whether it's purchasing an aircraft, chartering a flight, or booking a helicopter experience.</p>
         </div>
       </section>
 
@@ -131,9 +108,7 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Information */}
             <div>
-              <h2 className="text-3xl font-bold luxury-heading mb-8">
-                Get in <span className="gold-text">Touch</span>
-              </h2>
+              <h2 className="text-3xl font-bold luxury-heading mb-8">Get in <span className="gold-text">Touch</span></h2>
               
               <div className="space-y-6 mb-8">
                 <Card>
@@ -320,5 +295,13 @@ export default function ContactPage() {
         </div>
       </section>
     </div>
+  )
+}
+
+export default function ContactPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <ContactInner />
+    </Suspense>
   )
 }

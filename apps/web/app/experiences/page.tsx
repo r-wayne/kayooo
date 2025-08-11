@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -5,7 +7,7 @@ import { Clock, Users, Star, MessageCircle } from 'lucide-react'
 import { Card, CardContent, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { getExperiences } from '@/lib/services/experience'
-import { formatCurrency, generateWhatsAppUrl } from '../../../packages/ui/lib/utils'
+import { formatCurrency, generateWhatsAppUrl } from '@ui/lib/utils'
 
 export default async function ExperiencesPage() {
   const experiences = await getExperiences()

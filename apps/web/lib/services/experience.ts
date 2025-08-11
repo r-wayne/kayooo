@@ -1,20 +1,24 @@
-import { getDatabase } from '@/../../packages/db/lib/mongodb'
-import { Experience, CreateExperienceData } from '@/../../packages/db/models/Experience'
+import { getDatabase } from '@db/lib/mongodb'
+import { Experience, CreateExperienceData } from '@db/models/Experience'
 import { ObjectId } from 'mongodb'
+
+type DbExperience = Omit<Experience, '_id'> & { _id: ObjectId }
 
 export async function getExperiences(): Promise<Experience[]> {
   const db = await getDatabase()
-  const experiences = await db.collection('experiences')
+  const collection = db.collection<DbExperience>('experiences')
+  const experiences = await collection
     .find({ available: true })
     .sort({ createdAt: -1 })
     .toArray()
   
-  return experiences.map(doc => ({ ...doc, _id: doc._id.toString() }))
+  return experiences.map((doc: DbExperience) => ({ ...doc, _id: doc._id.toString() }))
 }
 
 export async function getExperienceById(id: string): Promise<Experience | null> {
   const db = await getDatabase()
-  const experience = await db.collection('experiences').findOne({ _id: new ObjectId(id) })
+  const collection = db.collection<DbExperience>('experiences')
+  const experience = await collection.findOne({ _id: new ObjectId(id) })
   
   if (!experience) return null
   return { ...experience, _id: experience._id.toString() }
@@ -22,22 +26,24 @@ export async function getExperienceById(id: string): Promise<Experience | null> 
 
 export async function createExperience(data: CreateExperienceData): Promise<Experience> {
   const db = await getDatabase()
+  const collection = db.collection<DbExperience>('experiences')
   const now = new Date()
   
-  const experienceData = {
+  const experienceData: Omit<DbExperience, '_id'> = {
     ...data,
     available: data.available ?? true,
     createdAt: now,
     updatedAt: now,
   }
   
-  const result = await db.collection('experiences').insertOne(experienceData)
+  const result = await collection.insertOne(experienceData as any)
   return { ...experienceData, _id: result.insertedId.toString() }
 }
 
 export async function updateExperience(id: string, data: Partial<CreateExperienceData>): Promise<boolean> {
   const db = await getDatabase()
-  const result = await db.collection('experiences').updateOne(
+  const collection = db.collection<DbExperience>('experiences')
+  const result = await collection.updateOne(
     { _id: new ObjectId(id) },
     { $set: { ...data, updatedAt: new Date() } }
   )
@@ -47,6 +53,7 @@ export async function updateExperience(id: string, data: Partial<CreateExperienc
 
 export async function deleteExperience(id: string): Promise<boolean> {
   const db = await getDatabase()
-  const result = await db.collection('experiences').deleteOne({ _id: new ObjectId(id) })
+  const collection = db.collection<DbExperience>('experiences')
+  const result = await collection.deleteOne({ _id: new ObjectId(id) })
   return result.deletedCount > 0
 }

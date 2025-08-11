@@ -3,7 +3,7 @@
 import React from 'react'
 import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
-import { cn } from '../../../packages/ui/lib/utils'
+import { cn } from '@ui/lib/utils'
 
 interface ModalProps {
   isOpen: boolean

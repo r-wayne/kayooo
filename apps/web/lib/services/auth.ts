@@ -1,13 +1,17 @@
-import { getDatabase } from '@/../../packages/db/lib/mongodb'
-import { Admin } from '@/../../packages/db/models/Admin'
+import { getDatabase } from '@db/lib/mongodb'
+import { Admin } from '@db/models/Admin'
 import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
+import jwt, { type Secret, type SignOptions, type JwtPayload } from 'jsonwebtoken'
+import { ObjectId } from 'mongodb'
 
-const JWT_SECRET = process.env.JWT_SECRET!
+type DbAdmin = Omit<Admin, '_id'> & { _id: ObjectId }
+
+const JWT_SECRET: Secret = (process.env.JWT_SECRET || 'dev-secret-key') as Secret
 
 export async function validateAdmin(email: string, password: string): Promise<Admin | null> {
   const db = await getDatabase()
-  const admin = await db.collection('admins').findOne({ email })
+  const collection = db.collection<DbAdmin>('admins')
+  const admin = await collection.findOne({ email })
   
   if (!admin) return null
   
@@ -18,16 +22,14 @@ export async function validateAdmin(email: string, password: string): Promise<Ad
 }
 
 export function generateToken(adminId: string): string {
-  return jwt.sign(
-    { adminId },
-    JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
-  )
+  const options: SignOptions = { expiresIn: (process.env.JWT_EXPIRES_IN || '7d') as any }
+  return jwt.sign({ adminId }, JWT_SECRET, options)
 }
 
 export function verifyToken(token: string): { adminId: string } | null {
   try {
-    return jwt.verify(token, JWT_SECRET) as { adminId: string }
+    const payload = jwt.verify(token, JWT_SECRET) as JwtPayload & { adminId: string }
+    return { adminId: payload.adminId }
   } catch {
     return null
   }

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getAircraftById, updateAircraft, deleteAircraft } from '@/lib/services/aircraft'
 import { verifyToken } from '@/lib/services/auth'
 
+export const runtime = 'nodejs'
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
