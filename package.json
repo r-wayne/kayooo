@@ -1,0 +1,20 @@
+{
+  "name": "kayo-charters",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm run --filter web dev",
+    "build": "pnpm run --filter web build",
+    "start": "pnpm run --filter web start",
+    "lint": "pnpm run --filter web lint",
+    "db:seed": "pnpm run --filter web db:seed"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}
