@@ -18,8 +18,9 @@
     "pnpm": ">=8.0.0"
   },
   "devDependencies": {
-    "mongodb": "^6.18.0",
     "clsx": "^2.1.1",
+    "mongodb": "^6.18.0",
+    "pnpm": "^10.14.0",
     "tailwind-merge": "^2.5.2"
   }
 }
