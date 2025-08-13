@@ -1,32 +1,29 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { verifyToken } from '@/lib/services/auth'
+import { jwtVerify } from 'jose'
 
-export function middleware(request: NextRequest) {
-  // Check if the request is for admin routes
+async function isTokenValid(token: string): Promise<boolean> {
+  try {
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET || 'dev-secret-key')
+    await jwtVerify(token, secret)
+    return true
+  } catch {
+    return false
+  }
+}
+
+export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith('/admin')) {
-    // Allow login page
     if (request.nextUrl.pathname === '/admin/login') {
       return NextResponse.next()
     }
-
-    // Check for auth token
     const token = request.cookies.get('auth-token')?.value
+    if (!token) return NextResponse.redirect(new URL('/admin/login', request.url))
 
-    if (!token) {
-      return NextResponse.redirect(new URL('/admin/login', request.url))
-    }
-
-    // Verify token
-    const payload = verifyToken(token)
-    if (!payload) {
-      return NextResponse.redirect(new URL('/admin/login', request.url))
-    }
+    const valid = await isTokenValid(token)
+    if (!valid) return NextResponse.redirect(new URL('/admin/login', request.url))
   }
-
   return NextResponse.next()
 }
 
-export const config = {
-  matcher: '/admin/:path*'
-}
+export const config = { matcher: '/admin/:path*' }
